@@ -16,11 +16,12 @@ export async function POST(request: Request) {
   try {
     const profile = await getServerProfile()
 
-    checkApiKey(profile.nebius_api_key, "Nebius")
+    const profileAny = profile as any
+    checkApiKey(profileAny.nebius_api_key, "Nebius")
 
     // Nebius uses OpenAI-compatible API
     const nebius = new OpenAI({
-      apiKey: profile.nebius_api_key || "",
+      apiKey: profileAny.nebius_api_key || "",
       baseURL: "https://api.studio.nebius.ai/v1/"
     })
 

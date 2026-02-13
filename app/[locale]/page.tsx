@@ -3,11 +3,6 @@
 import { ChatbotUISVG } from "@/components/icons/chatbotui-svg"
 import {
   IconArrowRight,
-  IconBrandOpenai,
-  IconCloud,
-  IconSearch,
-  IconServer,
-  IconBolt,
   IconBrain,
   IconMessage,
   IconShield,

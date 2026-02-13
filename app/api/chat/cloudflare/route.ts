@@ -14,14 +14,15 @@ export async function POST(request: Request) {
   try {
     const profile = await getServerProfile()
 
-    checkApiKey(profile.cloudflare_api_key, "Cloudflare")
+    const profileAny = profile as any
+    checkApiKey(profileAny.cloudflare_api_key, "Cloudflare")
 
-    const accountId = (profile as any).cloudflare_account_id
+    const accountId = profileAny.cloudflare_account_id
     if (!accountId) {
       throw new Error("Cloudflare Account ID not found")
     }
 
-    const apiKey = profile.cloudflare_api_key || ""
+    const apiKey = profileAny.cloudflare_api_key || ""
 
     const response = await fetch(
       `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${chatSettings.model}`,

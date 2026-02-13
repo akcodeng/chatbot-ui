@@ -13,7 +13,8 @@ export async function POST(request: Request) {
   try {
     const profile = await getServerProfile()
 
-    checkApiKey(profile.tavily_api_key, "Tavily")
+    const profileAny = profile as any
+    checkApiKey(profileAny.tavily_api_key, "Tavily")
 
     // Get the last user message as the search query
     const lastUserMessage = messages
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        api_key: profile.tavily_api_key,
+        api_key: profileAny.tavily_api_key,
         query,
         search_depth: "advanced",
         include_answer: true,

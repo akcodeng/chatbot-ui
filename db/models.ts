@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getModelById = async (modelId: string) => {
   const { data: model, error } = await supabase
@@ -29,10 +29,14 @@ export const getModelWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    models: Tables<"models">[]
+  }
 }
 
 export const getModelWorkspacesByModelId = async (modelId: string) => {
@@ -49,10 +53,14 @@ export const getModelWorkspacesByModelId = async (modelId: string) => {
     .single()
 
   if (!model) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Model not found")
   }
 
-  return model
+  return model as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createModel = async (

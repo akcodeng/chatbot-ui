@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getAssistantById = async (assistantId: string) => {
   const { data: assistant, error } = await supabase
@@ -31,10 +31,14 @@ export const getAssistantWorkspacesByWorkspaceId = async (
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    assistants: Tables<"assistants">[]
+  }
 }
 
 export const getAssistantWorkspacesByAssistantId = async (
@@ -53,10 +57,14 @@ export const getAssistantWorkspacesByAssistantId = async (
     .single()
 
   if (!assistant) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Assistant not found")
   }
 
-  return assistant
+  return assistant as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createAssistant = async (

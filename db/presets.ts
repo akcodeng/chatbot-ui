@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getPresetById = async (presetId: string) => {
   const { data: preset, error } = await supabase
@@ -29,10 +29,14 @@ export const getPresetWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    presets: Tables<"presets">[]
+  }
 }
 
 export const getPresetWorkspacesByPresetId = async (presetId: string) => {
@@ -49,10 +53,14 @@ export const getPresetWorkspacesByPresetId = async (presetId: string) => {
     .single()
 
   if (!preset) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Preset not found")
   }
 
-  return preset
+  return preset as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createPreset = async (

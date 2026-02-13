@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getToolById = async (toolId: string) => {
   const { data: tool, error } = await supabase
@@ -29,10 +29,14 @@ export const getToolWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    tools: Tables<"tools">[]
+  }
 }
 
 export const getToolWorkspacesByToolId = async (toolId: string) => {
@@ -49,10 +53,14 @@ export const getToolWorkspacesByToolId = async (toolId: string) => {
     .single()
 
   if (!tool) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Tool not found")
   }
 
-  return tool
+  return tool as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createTool = async (

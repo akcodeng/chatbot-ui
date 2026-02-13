@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 import mammoth from "mammoth"
 import { toast } from "sonner"
 import { uploadFile } from "./storage/files"
@@ -32,10 +32,14 @@ export const getFileWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    files: Tables<"files">[]
+  }
 }
 
 export const getFileWorkspacesByFileId = async (fileId: string) => {
@@ -52,10 +56,14 @@ export const getFileWorkspacesByFileId = async (fileId: string) => {
     .single()
 
   if (!file) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "File not found")
   }
 
-  return file
+  return file as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createFileBasedOnExtension = async (

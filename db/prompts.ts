@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getPromptById = async (promptId: string) => {
   const { data: prompt, error } = await supabase
@@ -29,10 +29,14 @@ export const getPromptWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    prompts: Tables<"prompts">[]
+  }
 }
 
 export const getPromptWorkspacesByPromptId = async (promptId: string) => {
@@ -49,10 +53,14 @@ export const getPromptWorkspacesByPromptId = async (promptId: string) => {
     .single()
 
   if (!prompt) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Prompt not found")
   }
 
-  return prompt
+  return prompt as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createPrompt = async (

@@ -9,7 +9,7 @@ export const getModelById = async (modelId: string) => {
     .single()
 
   if (!model) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return model
@@ -74,7 +74,7 @@ export const createModel = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createModelWorkspace({
@@ -96,7 +96,7 @@ export const createModels = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createModelWorkspaces(
@@ -122,7 +122,7 @@ export const createModelWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdModelWorkspace
@@ -136,7 +136,7 @@ export const createModelWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdModelWorkspaces
 }
@@ -153,7 +153,7 @@ export const updateModel = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedModel
@@ -163,7 +163,7 @@ export const deleteModel = async (modelId: string) => {
   const { error } = await supabase.from("models").delete().eq("id", modelId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -179,7 +179,7 @@ export const deleteModelWorkspace = async (
     .eq("model_id", modelId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

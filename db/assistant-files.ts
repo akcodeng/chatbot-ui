@@ -15,7 +15,7 @@ export const getAssistantFilesByAssistantId = async (assistantId: string) => {
     .single()
 
   if (!assistantFiles) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return assistantFiles
@@ -30,7 +30,7 @@ export const createAssistantFile = async (
     .select("*")
 
   if (!createdAssistantFile) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdAssistantFile
@@ -45,7 +45,7 @@ export const createAssistantFiles = async (
     .select("*")
 
   if (!createdAssistantFiles) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdAssistantFiles
@@ -61,7 +61,7 @@ export const deleteAssistantFile = async (
     .eq("assistant_id", assistantId)
     .eq("file_id", fileId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

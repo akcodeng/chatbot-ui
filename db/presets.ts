@@ -9,7 +9,7 @@ export const getPresetById = async (presetId: string) => {
     .single()
 
   if (!preset) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return preset
@@ -74,7 +74,7 @@ export const createPreset = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createPresetWorkspace({
@@ -96,7 +96,7 @@ export const createPresets = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createPresetWorkspaces(
@@ -122,7 +122,7 @@ export const createPresetWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdPresetWorkspace
@@ -136,7 +136,7 @@ export const createPresetWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdPresetWorkspaces
 }
@@ -153,7 +153,7 @@ export const updatePreset = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedPreset
@@ -163,7 +163,7 @@ export const deletePreset = async (presetId: string) => {
   const { error } = await supabase.from("presets").delete().eq("id", presetId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -179,7 +179,7 @@ export const deletePresetWorkspace = async (
     .eq("preset_id", presetId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

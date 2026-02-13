@@ -13,8 +13,12 @@ export async function GET() {
     groq: VALID_ENV_KEYS.GROQ_API_KEY,
     perplexity: VALID_ENV_KEYS.PERPLEXITY_API_KEY,
     openrouter: VALID_ENV_KEYS.OPENROUTER_API_KEY,
+    cloudflare: VALID_ENV_KEYS.CLOUDFLARE_API_KEY,
+    tavily: VALID_ENV_KEYS.TAVILY_API_KEY,
+    nebius: VALID_ENV_KEYS.NEBIUS_API_KEY,
 
     openai_organization_id: VALID_ENV_KEYS.OPENAI_ORGANIZATION_ID,
+    cloudflare_account_id: VALID_ENV_KEYS.CLOUDFLARE_ACCOUNT_ID,
 
     azure_openai_endpoint: VALID_ENV_KEYS.AZURE_OPENAI_ENDPOINT,
     azure_gpt_35_turbo_name: VALID_ENV_KEYS.AZURE_GPT_35_TURBO_NAME,

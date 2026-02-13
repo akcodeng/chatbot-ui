@@ -3,7 +3,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 
 const withPWA = require("next-pwa")({
-  dest: "public"
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true
 })
 
 module.exports = withBundleAnalyzer(
@@ -26,7 +29,29 @@ module.exports = withBundleAnalyzer(
       ]
     },
     experimental: {
-      serverComponentsExternalPackages: ["sharp", "onnxruntime-node"]
+      serverComponentsExternalPackages: [
+        "sharp",
+        "onnxruntime-node",
+        "@xenova/transformers"
+      ]
+    },
+    webpack: (config, { isServer }) => {
+      // Prevent webpack from trying to parse native .node binary files
+      config.module.rules.push({
+        test: /\.node$/,
+        type: "asset/resource"
+      })
+
+      // Externalize packages with native bindings on the server
+      if (isServer) {
+        const existingExternals = config.externals || []
+        config.externals = [
+          ...(Array.isArray(existingExternals) ? existingExternals : [existingExternals]),
+          "onnxruntime-node"
+        ]
+      }
+
+      return config
     }
   })
 )

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       .single()
 
     if (!data) {
-      throw new Error(error.message)
+      throw new Error(error?.message || "Unknown error")
     }
 
     return new Response(JSON.stringify({ username: data.username }), {

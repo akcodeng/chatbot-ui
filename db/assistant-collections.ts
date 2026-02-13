@@ -17,7 +17,7 @@ export const getAssistantCollectionsByAssistantId = async (
     .single()
 
   if (!assistantCollections) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return assistantCollections
@@ -32,7 +32,7 @@ export const createAssistantCollection = async (
     .select("*")
 
   if (!createdAssistantCollection) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdAssistantCollection
@@ -47,7 +47,7 @@ export const createAssistantCollections = async (
     .select("*")
 
   if (!createdAssistantCollections) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdAssistantCollections
@@ -63,7 +63,7 @@ export const deleteAssistantCollection = async (
     .eq("assistant_id", assistantId)
     .eq("collection_id", collectionId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

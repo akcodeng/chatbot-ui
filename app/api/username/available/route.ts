@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       .eq("username", username)
 
     if (!usernames) {
-      throw new Error(error.message)
+      throw new Error(error?.message || "Unknown error")
     }
 
     return new Response(JSON.stringify({ isAvailable: !usernames.length }), {

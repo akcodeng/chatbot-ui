@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getPromptById = async (promptId: string) => {
   const { data: prompt, error } = await supabase
@@ -9,7 +9,7 @@ export const getPromptById = async (promptId: string) => {
     .single()
 
   if (!prompt) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return prompt
@@ -29,10 +29,14 @@ export const getPromptWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    prompts: Tables<"prompts">[]
+  }
 }
 
 export const getPromptWorkspacesByPromptId = async (promptId: string) => {
@@ -49,10 +53,14 @@ export const getPromptWorkspacesByPromptId = async (promptId: string) => {
     .single()
 
   if (!prompt) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Prompt not found")
   }
 
-  return prompt
+  return prompt as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createPrompt = async (
@@ -66,7 +74,7 @@ export const createPrompt = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createPromptWorkspace({
@@ -88,7 +96,7 @@ export const createPrompts = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createPromptWorkspaces(
@@ -114,7 +122,7 @@ export const createPromptWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdPromptWorkspace
@@ -128,7 +136,7 @@ export const createPromptWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdPromptWorkspaces
 }
@@ -145,7 +153,7 @@ export const updatePrompt = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedPrompt
@@ -155,7 +163,7 @@ export const deletePrompt = async (promptId: string) => {
   const { error } = await supabase.from("prompts").delete().eq("id", promptId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -171,7 +179,7 @@ export const deletePromptWorkspace = async (
     .eq("prompt_id", promptId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

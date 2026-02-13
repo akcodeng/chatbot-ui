@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getAssistantById = async (assistantId: string) => {
   const { data: assistant, error } = await supabase
@@ -9,7 +9,7 @@ export const getAssistantById = async (assistantId: string) => {
     .single()
 
   if (!assistant) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return assistant
@@ -31,10 +31,14 @@ export const getAssistantWorkspacesByWorkspaceId = async (
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    assistants: Tables<"assistants">[]
+  }
 }
 
 export const getAssistantWorkspacesByAssistantId = async (
@@ -53,10 +57,14 @@ export const getAssistantWorkspacesByAssistantId = async (
     .single()
 
   if (!assistant) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Assistant not found")
   }
 
-  return assistant
+  return assistant as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createAssistant = async (
@@ -70,7 +78,7 @@ export const createAssistant = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createAssistantWorkspace({
@@ -92,7 +100,7 @@ export const createAssistants = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createAssistantWorkspaces(
@@ -118,7 +126,7 @@ export const createAssistantWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdAssistantWorkspace
@@ -132,7 +140,7 @@ export const createAssistantWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdAssistantWorkspaces
 }
@@ -149,7 +157,7 @@ export const updateAssistant = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedAssistant
@@ -162,7 +170,7 @@ export const deleteAssistant = async (assistantId: string) => {
     .eq("id", assistantId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -178,7 +186,7 @@ export const deleteAssistantWorkspace = async (
     .eq("assistant_id", assistantId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

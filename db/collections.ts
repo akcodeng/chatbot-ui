@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getCollectionById = async (collectionId: string) => {
   const { data: collection, error } = await supabase
@@ -9,7 +9,7 @@ export const getCollectionById = async (collectionId: string) => {
     .single()
 
   if (!collection) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return collection
@@ -31,10 +31,14 @@ export const getCollectionWorkspacesByWorkspaceId = async (
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    collections: Tables<"collections">[]
+  }
 }
 
 export const getCollectionWorkspacesByCollectionId = async (
@@ -53,10 +57,14 @@ export const getCollectionWorkspacesByCollectionId = async (
     .single()
 
   if (!collection) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Collection not found")
   }
 
-  return collection
+  return collection as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createCollection = async (
@@ -70,7 +78,7 @@ export const createCollection = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createCollectionWorkspace({
@@ -92,7 +100,7 @@ export const createCollections = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createCollectionWorkspaces(
@@ -118,7 +126,7 @@ export const createCollectionWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdCollectionWorkspace
@@ -132,7 +140,7 @@ export const createCollectionWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdCollectionWorkspaces
 }
@@ -149,7 +157,7 @@ export const updateCollection = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedCollection
@@ -162,7 +170,7 @@ export const deleteCollection = async (collectionId: string) => {
     .eq("id", collectionId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -178,7 +186,7 @@ export const deleteCollectionWorkspace = async (
     .eq("collection_id", collectionId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

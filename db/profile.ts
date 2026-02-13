@@ -9,7 +9,7 @@ export const getProfileByUserId = async (userId: string) => {
     .single()
 
   if (!profile) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return profile
@@ -22,7 +22,7 @@ export const getProfilesByUserId = async (userId: string) => {
     .eq("user_id", userId)
 
   if (!profiles) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return profiles
@@ -36,7 +36,7 @@ export const createProfile = async (profile: TablesInsert<"profiles">) => {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdProfile
@@ -54,7 +54,7 @@ export const updateProfile = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedProfile
@@ -64,7 +64,7 @@ export const deleteProfile = async (profileId: string) => {
   const { error } = await supabase.from("profiles").delete().eq("id", profileId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 import mammoth from "mammoth"
 import { toast } from "sonner"
 import { uploadFile } from "./storage/files"
@@ -12,7 +12,7 @@ export const getFileById = async (fileId: string) => {
     .single()
 
   if (!file) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return file
@@ -32,10 +32,14 @@ export const getFileWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    files: Tables<"files">[]
+  }
 }
 
 export const getFileWorkspacesByFileId = async (fileId: string) => {
@@ -52,10 +56,14 @@ export const getFileWorkspacesByFileId = async (fileId: string) => {
     .single()
 
   if (!file) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "File not found")
   }
 
-  return file
+  return file as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createFileBasedOnExtension = async (
@@ -108,7 +116,7 @@ export const createFile = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createFileWorkspace({
@@ -168,7 +176,7 @@ export const createDocXFile = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createFileWorkspace({
@@ -227,7 +235,7 @@ export const createFiles = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createFileWorkspaces(
@@ -253,7 +261,7 @@ export const createFileWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdFileWorkspace
@@ -267,7 +275,7 @@ export const createFileWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdFileWorkspaces
 }
@@ -284,7 +292,7 @@ export const updateFile = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedFile
@@ -294,7 +302,7 @@ export const deleteFile = async (fileId: string) => {
   const { error } = await supabase.from("files").delete().eq("id", fileId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -310,7 +318,7 @@ export const deleteFileWorkspace = async (
     .eq("file_id", fileId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

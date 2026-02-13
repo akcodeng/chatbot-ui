@@ -117,6 +117,18 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
   const [openrouterAPIKey, setOpenrouterAPIKey] = useState(
     profile?.openrouter_api_key || ""
   )
+  const [cloudflareAPIKey, setCloudflareAPIKey] = useState(
+    (profile as any)?.cloudflare_api_key || ""
+  )
+  const [cloudflareAccountID, setCloudflareAccountID] = useState(
+    (profile as any)?.cloudflare_account_id || ""
+  )
+  const [tavilyAPIKey, setTavilyAPIKey] = useState(
+    (profile as any)?.tavily_api_key || ""
+  )
+  const [nebiusAPIKey, setNebiusAPIKey] = useState(
+    (profile as any)?.nebius_api_key || ""
+  )
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -157,8 +169,12 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
       azure_openai_45_turbo_id: azureOpenai45TurboID,
       azure_openai_45_vision_id: azureOpenai45VisionID,
       azure_openai_embeddings_id: azureEmbeddingsID,
-      openrouter_api_key: openrouterAPIKey
-    })
+      openrouter_api_key: openrouterAPIKey,
+      cloudflare_api_key: cloudflareAPIKey,
+      cloudflare_account_id: cloudflareAccountID,
+      tavily_api_key: tavilyAPIKey,
+      nebius_api_key: nebiusAPIKey
+    } as any)
 
     setProfile(updatedProfile)
 
@@ -172,7 +188,10 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
       "mistral",
       "groq",
       "perplexity",
-      "openrouter"
+      "openrouter",
+      "cloudflare",
+      "tavily",
+      "nebius"
     ]
 
     providers.forEach(async provider => {
@@ -719,6 +738,63 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                       type="password"
                       value={openrouterAPIKey}
                       onChange={e => setOpenrouterAPIKey(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                {envKeyMap["cloudflare"] ? (
+                  <Label>Cloudflare API key set by admin.</Label>
+                ) : (
+                  <>
+                    <Label>Cloudflare Workers AI API Key</Label>
+                    <Input
+                      placeholder="Cloudflare API Key"
+                      type="password"
+                      value={cloudflareAPIKey}
+                      onChange={e => setCloudflareAPIKey(e.target.value)}
+                    />
+                    <div className="mt-1 space-y-1">
+                      <Label>Cloudflare Account ID</Label>
+                      <Input
+                        placeholder="Cloudflare Account ID"
+                        type="password"
+                        value={cloudflareAccountID}
+                        onChange={e => setCloudflareAccountID(e.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                {envKeyMap["tavily"] ? (
+                  <Label>Tavily API key set by admin.</Label>
+                ) : (
+                  <>
+                    <Label>Tavily API Key</Label>
+                    <Input
+                      placeholder="Tavily API Key"
+                      type="password"
+                      value={tavilyAPIKey}
+                      onChange={e => setTavilyAPIKey(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                {envKeyMap["nebius"] ? (
+                  <Label>Nebius API key set by admin.</Label>
+                ) : (
+                  <>
+                    <Label>Nebius AI Studio API Key</Label>
+                    <Input
+                      placeholder="Nebius API Key"
+                      type="password"
+                      value={nebiusAPIKey}
+                      onChange={e => setNebiusAPIKey(e.target.value)}
                     />
                   </>
                 )}

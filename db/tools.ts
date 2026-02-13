@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getToolById = async (toolId: string) => {
   const { data: tool, error } = await supabase
@@ -9,7 +9,7 @@ export const getToolById = async (toolId: string) => {
     .single()
 
   if (!tool) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return tool
@@ -29,10 +29,14 @@ export const getToolWorkspacesByWorkspaceId = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Workspace not found")
   }
 
-  return workspace
+  return workspace as unknown as {
+    id: string
+    name: string
+    tools: Tables<"tools">[]
+  }
 }
 
 export const getToolWorkspacesByToolId = async (toolId: string) => {
@@ -49,10 +53,14 @@ export const getToolWorkspacesByToolId = async (toolId: string) => {
     .single()
 
   if (!tool) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Tool not found")
   }
 
-  return tool
+  return tool as unknown as {
+    id: string
+    name: string
+    workspaces: Tables<"workspaces">[]
+  }
 }
 
 export const createTool = async (
@@ -66,7 +74,7 @@ export const createTool = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createToolWorkspace({
@@ -88,7 +96,7 @@ export const createTools = async (
     .select("*")
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   await createToolWorkspaces(
@@ -114,7 +122,7 @@ export const createToolWorkspace = async (item: {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return createdToolWorkspace
@@ -128,7 +136,7 @@ export const createToolWorkspaces = async (
     .insert(items)
     .select("*")
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return createdToolWorkspaces
 }
@@ -145,7 +153,7 @@ export const updateTool = async (
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return updatedTool
@@ -155,7 +163,7 @@ export const deleteTool = async (toolId: string) => {
   const { error } = await supabase.from("tools").delete().eq("id", toolId)
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(error?.message || "Unknown error")
   }
 
   return true
@@ -171,7 +179,7 @@ export const deleteToolWorkspace = async (
     .eq("tool_id", toolId)
     .eq("workspace_id", workspaceId)
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(error?.message || "Unknown error")
 
   return true
 }

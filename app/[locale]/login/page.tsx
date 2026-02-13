@@ -162,60 +162,74 @@ export default async function Login({
   }
 
   return (
-    <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
-      <form
-        className="animate-in text-foreground flex w-full flex-1 flex-col justify-center gap-2"
-        action={signIn}
-      >
-        <Brand />
-
-        <Label className="text-md mt-4" htmlFor="email">
-          Email
-        </Label>
-        <Input
-          className="mb-3 rounded-md border bg-inherit px-4 py-2"
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-
-        <Label className="text-md" htmlFor="password">
-          Password
-        </Label>
-        <Input
-          className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-        />
-
-        <SubmitButton className="mb-2 rounded-md bg-blue-700 px-4 py-2 text-white">
-          Login
-        </SubmitButton>
-
-        <SubmitButton
-          formAction={signUp}
-          className="border-foreground/20 mb-2 rounded-md border px-4 py-2"
+    <div className="flex w-full flex-1 items-center justify-center px-4 py-8 sm:px-8">
+      <div className="bg-card border-border w-full max-w-md rounded-2xl border p-6 shadow-lg sm:p-8">
+        <form
+          className="animate-in text-foreground flex w-full flex-col gap-4"
+          action={signIn}
         >
-          Sign Up
-        </SubmitButton>
+          <div className="mb-2">
+            <Brand />
+          </div>
 
-        <div className="text-muted-foreground mt-1 flex justify-center text-sm">
-          <span className="mr-1">Forgot your password?</span>
-          <button
-            formAction={handleResetPassword}
-            className="text-primary ml-1 underline hover:opacity-80"
-          >
-            Reset
-          </button>
-        </div>
-
-        {searchParams?.message && (
-          <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">
-            {searchParams.message}
+          <p className="text-muted-foreground text-center text-sm">
+            Sign in to access your AI chat workspace
           </p>
-        )}
-      </form>
+
+          <div className="mt-2 space-y-1">
+            <Label className="text-sm" htmlFor="email">
+              Email
+            </Label>
+            <Input
+              className="rounded-lg border bg-inherit px-4 py-2.5"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label className="text-sm" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              className="rounded-lg border bg-inherit px-4 py-2.5"
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="mt-2 flex flex-col gap-2">
+            <SubmitButton className="rounded-lg bg-blue-700 px-4 py-2.5 font-medium text-white transition-colors hover:bg-blue-800">
+              Login
+            </SubmitButton>
+
+            <SubmitButton
+              formAction={signUp}
+              className="border-border rounded-lg border px-4 py-2.5 font-medium transition-colors hover:bg-accent"
+            >
+              Sign Up
+            </SubmitButton>
+          </div>
+
+          <div className="text-muted-foreground mt-2 flex justify-center text-sm">
+            <span className="mr-1">Forgot your password?</span>
+            <button
+              formAction={handleResetPassword}
+              className="text-blue-500 underline hover:text-blue-400"
+            >
+              Reset
+            </button>
+          </div>
+
+          {searchParams?.message && (
+            <p className="bg-destructive/10 text-foreground mt-2 rounded-lg p-3 text-center text-sm">
+              {searchParams.message}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
   )
 }

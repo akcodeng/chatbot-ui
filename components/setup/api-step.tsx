@@ -19,6 +19,10 @@ interface APIStepProps {
   perplexityAPIKey: string
   useAzureOpenai: boolean
   openrouterAPIKey: string
+  cloudflareAPIKey: string
+  cloudflareAccountID: string
+  tavilyAPIKey: string
+  nebiusAPIKey: string
   onOpenrouterAPIKeyChange: (value: string) => void
   onOpenaiAPIKeyChange: (value: string) => void
   onOpenaiOrgIDChange: (value: string) => void
@@ -34,6 +38,10 @@ interface APIStepProps {
   onGroqAPIKeyChange: (value: string) => void
   onPerplexityAPIKeyChange: (value: string) => void
   onUseAzureOpenaiChange: (value: boolean) => void
+  onCloudflareAPIKeyChange: (value: string) => void
+  onCloudflareAccountIDChange: (value: string) => void
+  onTavilyAPIKeyChange: (value: string) => void
+  onNebiusAPIKeyChange: (value: string) => void
 }
 
 export const APIStep: FC<APIStepProps> = ({
@@ -66,7 +74,15 @@ export const APIStep: FC<APIStepProps> = ({
   onGroqAPIKeyChange,
   onPerplexityAPIKeyChange,
   onUseAzureOpenaiChange,
-  onOpenrouterAPIKeyChange
+  onOpenrouterAPIKeyChange,
+  cloudflareAPIKey,
+  cloudflareAccountID,
+  tavilyAPIKey,
+  nebiusAPIKey,
+  onCloudflareAPIKeyChange,
+  onCloudflareAccountIDChange,
+  onTavilyAPIKeyChange,
+  onNebiusAPIKeyChange
 }) => {
   return (
     <>
@@ -236,6 +252,50 @@ export const APIStep: FC<APIStepProps> = ({
           type="password"
           value={openrouterAPIKey}
           onChange={e => onOpenrouterAPIKeyChange(e.target.value)}
+        />
+      </div>
+
+      <div className="space-y-1">
+        <Label>Cloudflare Workers AI API Key</Label>
+
+        <Input
+          placeholder="Cloudflare API Key"
+          type="password"
+          value={cloudflareAPIKey}
+          onChange={e => onCloudflareAPIKeyChange(e.target.value)}
+        />
+      </div>
+
+      <div className="ml-8 space-y-1">
+        <Label>Cloudflare Account ID</Label>
+
+        <Input
+          placeholder="Cloudflare Account ID"
+          type="password"
+          value={cloudflareAccountID}
+          onChange={e => onCloudflareAccountIDChange(e.target.value)}
+        />
+      </div>
+
+      <div className="space-y-1">
+        <Label>Tavily API Key</Label>
+
+        <Input
+          placeholder="Tavily API Key"
+          type="password"
+          value={tavilyAPIKey}
+          onChange={e => onTavilyAPIKeyChange(e.target.value)}
+        />
+      </div>
+
+      <div className="space-y-1">
+        <Label>Nebius AI Studio API Key</Label>
+
+        <Input
+          placeholder="Nebius API Key"
+          type="password"
+          value={nebiusAPIKey}
+          onChange={e => onNebiusAPIKeyChange(e.target.value)}
         />
       </div>
     </>

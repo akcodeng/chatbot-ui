@@ -47,6 +47,10 @@ function addApiKeysToProfile(profile: Tables<"profiles">) {
     [VALID_ENV_KEYS.PERPLEXITY_API_KEY]: "perplexity_api_key",
     [VALID_ENV_KEYS.AZURE_OPENAI_API_KEY]: "azure_openai_api_key",
     [VALID_ENV_KEYS.OPENROUTER_API_KEY]: "openrouter_api_key",
+    [VALID_ENV_KEYS.CLOUDFLARE_API_KEY]: "cloudflare_api_key",
+    [VALID_ENV_KEYS.CLOUDFLARE_ACCOUNT_ID]: "cloudflare_account_id",
+    [VALID_ENV_KEYS.TAVILY_API_KEY]: "tavily_api_key",
+    [VALID_ENV_KEYS.NEBIUS_API_KEY]: "nebius_api_key",
 
     [VALID_ENV_KEYS.OPENAI_ORGANIZATION_ID]: "openai_organization_id",
 

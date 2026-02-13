@@ -7,6 +7,9 @@ export type LLMID =
   | MistralLLMID
   | GroqLLMID
   | PerplexityLLMID
+  | CloudflareLLMID
+  | NebiusLLMID
+  | TavilyLLMID
 
 // OpenAI Models (UPDATED 5/13/24)
 export type OpenAILLMID =
@@ -60,6 +63,23 @@ export type PerplexityLLMID =
   | "sonar-small-online" // Sonar Small Online
   | "sonar-medium-chat" // Sonar Medium Chat
   | "sonar-medium-online" // Sonar Medium Online
+
+// Cloudflare Workers AI Models
+export type CloudflareLLMID =
+  | "@cf/meta/llama-3.1-8b-instruct"
+  | "@cf/meta/llama-3.1-70b-instruct"
+  | "@cf/mistral/mistral-7b-instruct-v0.1"
+  | "@cf/qwen/qwen1.5-14b-chat-awq"
+
+// Nebius AI Studio Models
+export type NebiusLLMID =
+  | "meta-llama/Meta-Llama-3.1-70B-Instruct"
+  | "meta-llama/Meta-Llama-3.1-8B-Instruct"
+  | "Qwen/Qwen2.5-72B-Instruct"
+  | "mistralai/Mixtral-8x7B-Instruct-v0.1"
+
+// Tavily Search Model
+export type TavilyLLMID = "tavily-search"
 
 export interface LLM {
   modelId: LLMID

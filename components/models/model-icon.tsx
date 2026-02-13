@@ -3,7 +3,12 @@ import mistral from "@/public/providers/mistral.png"
 import groq from "@/public/providers/groq.png"
 import perplexity from "@/public/providers/perplexity.png"
 import { ModelProvider } from "@/types"
-import { IconSparkles } from "@tabler/icons-react"
+import {
+  IconCloud,
+  IconSearch,
+  IconSparkles,
+  IconServer
+} from "@tabler/icons-react"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import { FC, HTMLAttributes } from "react"
@@ -97,6 +102,45 @@ export const ModelIcon: FC<ModelIconProps> = ({
           )}
           src={perplexity.src}
           alt="Mistral"
+          width={width}
+          height={height}
+        />
+      )
+    case "cloudflare":
+      return (
+        <IconCloud
+          className={cn(
+            "rounded-sm p-1",
+            theme === "dark"
+              ? "bg-[#F48120] text-white"
+              : "border-DEFAULT border-[#F48120] text-[#F48120]"
+          )}
+          width={width}
+          height={height}
+        />
+      )
+    case "tavily":
+      return (
+        <IconSearch
+          className={cn(
+            "rounded-sm p-1",
+            theme === "dark"
+              ? "bg-[#0EA5E9] text-white"
+              : "border-DEFAULT border-[#0EA5E9] text-[#0EA5E9]"
+          )}
+          width={width}
+          height={height}
+        />
+      )
+    case "nebius":
+      return (
+        <IconServer
+          className={cn(
+            "rounded-sm p-1",
+            theme === "dark"
+              ? "bg-[#5B21B6] text-white"
+              : "border-DEFAULT border-[#5B21B6] text-[#5B21B6]"
+          )}
           width={width}
           height={height}
         />

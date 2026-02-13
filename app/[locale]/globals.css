@@ -59,7 +59,7 @@
 
     --ring: 0 0% 63.9%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -100,5 +100,18 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .sidebar-transition {
+    transition: width 200ms ease, min-width 200ms ease, max-width 200ms ease, opacity 200ms ease;
+  }
+}
+
+@media (max-width: 767px) {
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
   }
 }
